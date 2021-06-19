@@ -8,9 +8,20 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State var todos: [Todo] = []
+    
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        List(todos) { item in
+            Text(item.title)
+        }
+        .task {
+            do {
+                todos = try await APIService
+                    .fetchTodos()
+            } catch {
+                print(error)
+            }
+        }
     }
 }
 
